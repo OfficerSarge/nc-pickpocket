@@ -17,7 +17,7 @@ Config.SuccessPercentage = 75          -- Percentage needed to succeed overall
 Config.InventoryType = "qb"            -- Options: "qb", "ox", "custom"
 Config.InventoryImagePath = {
     qb = "qb-inventory/html/images/",
-    ox = "ox-inventory/web/images/",
+    ox = "ox_inventory/web/images/",
     custom = "your-inventory/path/"
 }
 Config.UseInventoryImagePath = true    -- Set to false to use local imgs folder instead
