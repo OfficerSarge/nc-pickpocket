@@ -3,8 +3,8 @@
 A sophisticated and immersive pickpocketing system for QBCore Framework with dynamic minigames, realistic NPC reactions, and extensive configuration options.
 
 ## Preview & Support
-
-- [Video Showcase](https://youtube.com/soon)
+![NCHub Pickpocket](https://github.com/user-attachments/assets/e6d98ad2-dd1d-42e4-bcda-b6012d41fdc1)
+- [Video Showcase](https://www.youtube.com/watch?v=4iCqRyJrbs4)
 - For support and more resources, join our Discord - [Discord.gg/NCHub](https://discord.gg/NCHub)
 
 ## Features
