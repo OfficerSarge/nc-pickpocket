@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: transparent !important;
+    color: white;
+    overflow: hidden;
+}
+
+.blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: -1;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+}
+
+.key, .continue-btn {
+    background-color: rgba(20, 20, 20, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.title, .instruction {
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.instruction {
+    font-size: 16px;
+    margin-bottom: 28px;
+    text-align: center;
+    opacity: 0.9;
+    font-weight: 400;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.locks-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 15px;
+    gap: 20px;
+    padding: 0 15px;
+}
+
+.lock {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(30, 30, 30, 0.7);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.lock img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    opacity: 0.85;
+}
+
+.lock svg {
+    width: 24px;
+    height: 24px;
+    fill: #888;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+.lock[data-name="phone"] svg {
+    fill: #fff;
+}
+
+.lock.unlocked svg {
+    display: none;
+}
+
+.lock.failed {
+    background-color: rgba(50, 50, 50, 0.85);
+    border: 2px solid #e74c3c;
+}
+
+.lock.failed svg {
+    fill: #e74c3c;
+}
+
+.lock.empty {
+    opacity: 0.6;
+}
+
+.progress-wrapper {
+    width: 100%;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.progress-container {
+    width: 100%;
+    height: 18px;
+    background-color: rgba(30, 30, 30, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+}
+
+.zone-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.zone {
+    height: 100%;
+    position: relative;
+}
+
+.red-zone {
+    background-color: #e74c3c;
+}
+
+.green-zone {
+    background-color: #4fc152;
+}
+
+.arrow-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.arrow {
+    position: absolute;
+    top: -15px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: left 0.05s linear;
+}
+
+.arrow-head {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 15px solid white;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.8));
+}
+
+.arrow-body {
+    width: 4px;
+    height: 18px;
+    background-color: white;
+    margin-top: -2px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.controls {
+    display: flex;
+    margin-top: 20px;
+    gap: 25px;
+}
+
+.key {
+    padding: 6px 16px;
+    background-color: rgba(30, 30, 30, 0.8);
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.continue-btn {
+    cursor: pointer;
+}
+
+.continue-btn:hover {
+    background-color: rgba(50, 50, 50, 0.8);
+}
+
+.value {
+    position: absolute;
+    color: #4fc152;
+    font-weight: 600;
+    font-size: 14px;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+    z-index: 3;
+}
+
+.no-items {
+    color: #e74c3c;
+    font-size: 18px;
+    text-align: center;
+    margin: 20px 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.lock.collected {
+    opacity: 0.6;
+    transform: scale(0.9);
+    transition: all 0.2s ease;
+}
+
+.lock.unlocked {
+    cursor: pointer;
+    border: 2px solid #4fc152;
+}
+
+.lock.unlocked:hover {
+    transform: scale(1.05);
+}
