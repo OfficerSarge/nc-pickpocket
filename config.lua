@@ -17,7 +17,7 @@ Config.SuccessPercentage = 75          -- Percentage needed to succeed overall
 Config.InventoryType = "qb"            -- Options: "qb", "ox", "custom"
 Config.InventoryImagePath = {
     qb = "qb-inventory/html/images/",
-    ox = "ox_inventory/web/images/",
+    ox = "ox-inventory/web/images/",
     custom = "your-inventory/path/"
 }
 Config.UseInventoryImagePath = true    -- Set to false to use local imgs folder instead
@@ -44,6 +44,16 @@ Config.StealableItems = {
     { item = 'lighter', label = 'Lighter', min = 1, max = 1, chance = 40, value = '1x' },
     { item = 'lockpick', label = 'Lockpick', min = 1, max = 1, chance = 40, value = '1x' },
     { item = 'screwdriver', label = 'Screwdriver', min = 1, max = 1, chance = 40, value = '1x' }
+}
+
+-- Blacklisted NPCs
+Config.UseModelBlacklist = true       -- Set to true to enable NPC model blacklisting
+Config.BlacklistedNPCModels = {
+    -- Add model hashes or names here
+    's_m_m_autoshop_01',    -- Mechanic NPC Model // for exmaple
+    'ig_mechanic',          -- Another mechanic model // for exmaple
+    'csb_trafficwarden'     -- Example of another NPC model // for exmaple
+    -- Add more models as needed
 }
 
 -- Notification Messages
