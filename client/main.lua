@@ -14,6 +14,22 @@ local function ResetPickpocketState()
     isMinigameReset = true
 end
 
+local function IsNPCBlacklisted(npcPed)
+    if not Config.UseModelBlacklist then return false end
+    
+    local npcModel = GetEntityModel(npcPed)
+    
+    for _, model in ipairs(Config.BlacklistedNPCModels) do
+        -- Check if the config entry is a hash (number) or a model name (string)
+        local modelHash = type(model) == "number" and model or GetHashKey(model)
+        if npcModel == modelHash then
+            return true
+        end
+    end
+    
+    return false
+end
+
 local function IsNearValidNPC()
     local player = PlayerPedId()
     local playerCoords = GetEntityCoords(player)
@@ -521,12 +537,12 @@ local function InitializeTarget()
                 icon = 'fas fa-hand-paper',
                 label = 'Pickpocket',
                 action = function(entity)
-                    if not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) then
+                    if not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) and not IsNPCBlacklisted(entity) then
                         StartPickpocketing(entity)
                     end
                 end,
                 canInteract = function(entity)
-                    return not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) and not IsPedInAnyVehicle(entity, false)
+                    return not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) and not IsPedInAnyVehicle(entity, false) and not IsNPCBlacklisted(entity)
                 end,
             },
         },
