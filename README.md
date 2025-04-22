@@ -1,6 +1,6 @@
 # nc-pickpocket
 
-A sophisticated and immersive pickpocketing system for QBCore Framework with dynamic minigames, realistic NPC reactions, and extensive configuration options.
+A sophisticated and immersive pickpocketing system for QBCore and ESX Frameworks with dynamic minigames, realistic NPC reactions, and extensive configuration options.
 
 ## Preview & Support
 ![NCHub Pickpocket](https://github.com/user-attachments/assets/e6d98ad2-dd1d-42e4-bcda-b6012d41fdc1)
@@ -20,8 +20,9 @@ A sophisticated and immersive pickpocketing system for QBCore Framework with dyn
 
 ## Dependencies
 
-- QBCore Framework
-- qb-target (for interaction)
+- QBCore Framework OR ESX Framework
+- qb-target (for QBCore interaction)
+- ox_target (for ESX / QBCore interaction)
 
 ## Optional Integrations
 
@@ -35,6 +36,19 @@ A sophisticated and immersive pickpocketing system for QBCore Framework with dyn
 3. Add `ensure nc-pickpocket` to your server.cfg
 4. Configure settings in `config.lua` to match your server's economy and requirements
 5. Restart your server
+
+## Framework Selection
+In the config.lua file, select your framework:
+```lua
+Config.Framework = 'qb' -- 'qb' for QBCore, 'esx' for ESX
+```
+
+## Target System Configuration
+Select your preferred target system:
+```lua
+Config.UseQBTarget = true  -- Set to true to use qb-target (QBCore only)
+Config.UseOxTarget = false -- Set to true to use ox_target (works with both QBCore and ESX)
+```
 
 ## Configuration Options
 
