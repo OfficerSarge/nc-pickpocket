@@ -2,7 +2,7 @@ fx_version 'cerulean'
 game 'gta5'
 
 description 'Pickpocket - Created by NaorNC - Discord.gg/NCHub'
-version '1.1.0'
+version '1.0.0'
 author 'NaorNC'
 
 ui_page 'html/index.html'
@@ -16,6 +16,8 @@ server_scripts {
 }
 
 shared_scripts {
+    '@qb-core/shared/locale.lua',
+    '@es_extended/imports.lua',
     'config.lua'
 }
 
