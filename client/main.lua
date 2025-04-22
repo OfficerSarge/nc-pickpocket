@@ -1,10 +1,25 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore, ESX = nil, nil
+
+if Config.Framework == 'qb' then
+    QBCore = exports['qb-core']:GetCoreObject()
+elseif Config.Framework == 'esx' then
+    ESX = exports['es_extended']:getSharedObject()
+end
+
 local pickpocketingInProgress = false
 local cooldownNPCs = {}
 local currentPickpocketItems = {}
 local isMinigameReset = true
 local callingPoliceNPC = nil
 local npcOriginalHeadings = {}
+
+local function ShowNotification(message, type)
+    if Config.Framework == 'qb' then
+        QBCore.Functions.Notify(message, type)
+    elseif Config.Framework == 'esx' then
+        ESX.ShowNotification(message)
+    end
+end
 
 local function ResetPickpocketState()
     pickpocketingInProgress = false
@@ -20,7 +35,6 @@ local function IsNPCBlacklisted(npcPed)
     local npcModel = GetEntityModel(npcPed)
     
     for _, model in ipairs(Config.BlacklistedNPCModels) do
-        -- Check if the config entry is a hash (number) or a model name (string)
         local modelHash = type(model) == "number" and model or GetHashKey(model)
         if npcModel == modelHash then
             return true
@@ -204,7 +218,7 @@ function HandleNPCCallingPolice(npcPed)
     
     TriggerServerEvent('nc-pickpocket:server:EmoteMessage', npcCoords, 'Someone is calling the police')
     
-    QBCore.Functions.Notify(Config.Notifications.NPCCalling, "error")
+    ShowNotification(Config.Notifications.NPCCalling, "error")
     
     local callThreadActive = true
     local callTime = Config.NPCCallPoliceTimeout
@@ -337,14 +351,14 @@ local function MakeNPCAggressive(npcPed, playerPed)
         end
     end)
     
-    QBCore.Functions.Notify(Config.Notifications.NPCNoticed, "error")
+    ShowNotification(Config.Notifications.NPCNoticed, "error")
 end
 
 local continuePickpocketing = false
 
 local function StartPickpocketing(npcPed)
     if pickpocketingInProgress then
-        QBCore.Functions.Notify(Config.Notifications.AlreadyPickpocketing, "error")
+        ShowNotification(Config.Notifications.AlreadyPickpocketing, "error")
         return
     end
     
@@ -361,7 +375,7 @@ local function StartPickpocketing(npcPed)
     local npcNetId = NetworkGetNetworkIdFromEntity(npcPed)
     
     if IsNPCOnCooldown(npcNetId) then
-        QBCore.Functions.Notify(Config.Notifications.CooldownActive, "error")
+        ShowNotification(Config.Notifications.CooldownActive, "error")
         return
     end
     
@@ -375,7 +389,7 @@ local function StartPickpocketing(npcPed)
     end
     
     if timeout >= 50 or not continuePickpocketing then
-        QBCore.Functions.Notify(Config.Notifications.NotEnoughPolice, "error")
+        ShowNotification(Config.Notifications.NotEnoughPolice, "error")
         return
     end
     
@@ -456,7 +470,7 @@ RegisterNUICallback('minigameComplete', function(data, cb)
         end)
         
         if success and successRate >= Config.SuccessPercentage and #collectedItems > 0 then
-            QBCore.Functions.Notify(Config.Notifications.SuccessfulPickpocket, "success")
+            ShowNotification(Config.Notifications.SuccessfulPickpocket, "success")
             
             TriggerServerEvent('nc-pickpocket:server:AddCollectedItems', collectedItems, currentPickpocketItems)
             
@@ -470,7 +484,7 @@ RegisterNUICallback('minigameComplete', function(data, cb)
                 end
             end
         elseif data.totalAttempts > 0 then
-            QBCore.Functions.Notify(Config.Notifications.FailedPickpocket, "error")
+            ShowNotification(Config.Notifications.FailedPickpocket, "error")
             
             Wait(math.random(50, 150))
             
@@ -504,7 +518,7 @@ RegisterNUICallback('closeMinigame', function(data, cb)
     end
     
     if data.emptyPockets then
-        QBCore.Functions.Notify(Config.Notifications.NoItems, "error")
+        ShowNotification(Config.Notifications.NoItems, "error")
     end
     
     cb({})
@@ -531,33 +545,59 @@ AddEventHandler('onResourceStop', function(resourceName)
 end)
 
 local function InitializeTarget()
-    exports['qb-target']:AddGlobalPed({
-        options = {
+    if Config.Framework == 'qb' and Config.UseQBTarget then
+        exports['qb-target']:AddGlobalPed({
+            options = {
+                {
+                    icon = 'fas fa-hand-paper',
+                    label = 'Pickpocket',
+                    action = function(entity)
+                        if not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) and not IsNPCBlacklisted(entity) then
+                            StartPickpocketing(entity)
+                        end
+                    end,
+                    canInteract = function(entity)
+                        return not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) and not IsPedInAnyVehicle(entity, false) and not IsNPCBlacklisted(entity)
+                    end,
+                },
+            },
+            distance = 1.5,
+        })
+    elseif Config.UseOxTarget then
+        exports.ox_target:addGlobalPed({
             {
+                name = 'pickpocket_npc',
                 icon = 'fas fa-hand-paper',
                 label = 'Pickpocket',
-                action = function(entity)
-                    if not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) and not IsNPCBlacklisted(entity) then
-                        StartPickpocketing(entity)
+                onSelect = function(data)
+                    if data.entity and not IsPedAPlayer(data.entity) and not IsPedDeadOrDying(data.entity, 1) and not IsNPCBlacklisted(data.entity) then
+                        StartPickpocketing(data.entity)
                     end
                 end,
                 canInteract = function(entity)
                     return not IsPedAPlayer(entity) and not IsPedDeadOrDying(entity, 1) and not IsPedInAnyVehicle(entity, false) and not IsNPCBlacklisted(entity)
                 end,
-            },
-        },
-        distance = 1.5,
-    })
+                distance = 1.5
+            }
+        })
+    end
+end
+
+if Config.Framework == 'qb' then
+    RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+        InitializeTarget()
+    end)
+elseif Config.Framework == 'esx' then
+    RegisterNetEvent('esx:playerLoaded')
+    AddEventHandler('esx:playerLoaded', function()
+        InitializeTarget()
+    end)
 end
 
 AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() == resourceName then
         InitializeTarget()
     end
-end)
-
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    InitializeTarget()
 end)
 
 RegisterNetEvent('nc-pickpocket:EmoteDisplay')
