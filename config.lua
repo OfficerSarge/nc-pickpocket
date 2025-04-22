@@ -1,5 +1,8 @@
 Config = {}
 
+-- Framework Settings
+Config.Framework = 'qb'               -- 'qb' for QBCore, 'esx' for ESX
+
 -- General Settings
 Config.EnableSkillCheck = true         -- Enable or disable the skill check minigame
 Config.MaxPickpocketAttempts = 3       -- Maximum number of attempts per NPC
@@ -8,6 +11,10 @@ Config.RequiredPolice = 0              -- Number of police required to pickpocke
 Config.EnableLegacyFuel = false        -- Enable pickpocketing for fuel
 Config.UseQBDispatch = false           -- Set to true if using qb-dispatch
 Config.MaxItemsPerPickpocket = 5       -- Maximum number of items to show in pickpocket minigame
+
+-- Target System Settings
+Config.UseQBTarget = true             -- Set to true to use qb-target (QBCore only)
+Config.UseOxTarget = false             -- Set to true to use ox_target (works with both QBCore and ESX)
 
 -- Difficulty Settings
 Config.MinigameSpeed = 1.5             -- Speed of the arrow (higher = harder)
@@ -50,9 +57,9 @@ Config.StealableItems = {
 Config.UseModelBlacklist = true       -- Set to true to enable NPC model blacklisting
 Config.BlacklistedNPCModels = {
     -- Add model hashes or names here
-    's_m_m_autoshop_01',    -- Mechanic NPC Model // for exmaple
-    'ig_mechanic',          -- Another mechanic model // for exmaple
-    'csb_trafficwarden'     -- Example of another NPC model // for exmaple
+    's_m_m_autoshop_01',    -- Mechanic NPC Model
+    'ig_mechanic',          -- Another mechanic model
+    'csb_trafficwarden'     -- Example of another NPC model
     -- Add more models as needed
 }
 
