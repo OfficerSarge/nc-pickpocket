@@ -259,7 +259,36 @@ function HandleNPCCallingPolice(npcPed)
     Wait(callTime)
     callThreadActive = false
     
-    if Config.UseQBDispatch then
+    -- Updated tk_dispatch integration
+    if Config.UseTkDispatch then
+        if exports['tk_dispatch'] then
+            exports['tk_dispatch']:addCall({
+                title = 'Pickpocket',
+                code = '10-31',
+                priority = 'Priority 2',
+                coords = npcCoords,
+                showLocation = true,
+                showDirection = true,
+                showGender = true,
+                showVehicle = false,
+                showWeapon = false,
+                takePhoto = false,
+                coordsOffset = 20,
+                removeTime = 1000 * 60 * 10, -- 10 minutes
+                showTime = 10000, -- 10 seconds notification
+                blip = {
+                    sprite = 225,
+                    scale = 1.0,
+                    color = 1,
+                    radius = 100.0
+                },
+                jobs = {'police', 'sheriff'} -- Configurable job names
+            })
+        else
+            -- Fallback to server event if tk_dispatch is not available
+            TriggerServerEvent('nc-pickpocket:server:NotifyPolice', npcCoords)
+        end
+    elseif Config.UseQBDispatch then
         if exports['qb-dispatch'] then
             TriggerServerEvent('qb-dispatch:server:SendAlert', {
                 name = 'Pickpocket',

@@ -63,7 +63,7 @@ Config = {
     UseQBDispatch = false,             -- Enable qb-dispatch integration
     EmptyPocketChance = 30,            -- Chance of finding nothing (0-100)
     NPCCallPoliceChance = 25,          -- Chance of NPC calling police on failure
-    NPCAggressiveChance = 100,         -- Chance of NPC becoming aggressive
+    NPCAggressiveChance = 75,         -- Chance of NPC becoming aggressive
     DiscoveryChance = 35,              -- Chance of discovery even after success
     InventoryType = "qb"               -- Inventory system type ("qb", "ox", "custom")
 }
